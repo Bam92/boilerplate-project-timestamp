@@ -42,7 +42,9 @@ const isTimestamp = userInput => !isNaN(userInput)
 
 app.get("/api/timestamp/:date_string", function (req, res) {
 
-  let userDate, unix, utc;
+  let userDate;
+  let unix = null;
+  let utc = "Invalid Date";
   const userInput = req.params.date_string
   
   if(isDate(userInput)) {
@@ -58,7 +60,8 @@ app.get("/api/timestamp/:date_string", function (req, res) {
     unix = userInput;
     utc = new Date(unix * 1000).toUTCString();
 
-  }  
+  } 
+ 
   
   res.json({  unix , utc  })
 });
