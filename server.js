@@ -30,9 +30,37 @@ app.get("/api/timestamp", (req, res) => {
 
 });
 
+const isDate = userInput => {
+  const regEx = /^\d{4}-\d{2}-\d{2}$/
+
+  if(regEx.test(userInput) && new Date(userInput) !== "Invalid Date") {
+  return true;
+  }
+}
+
+const isTimestamp = userInput => !isNaN(userInput)
+
 app.get("/api/timestamp/:date_string", function (req, res) {
-  const userDate = new Date(req.params.date_string) || new Date(req.params.date_string * 1000);
-  res.json({  unix: userDate.getTime(), utc: userDate.toUTCString() })
+
+  let userDate, unix, utc;
+  const userInput = req.params.date_string
+  
+  if(isDate(userInput)) {
+    userDate = new Date(userInput);
+   
+    unix = userDate.getTime()
+    utc = userDate.toUTCString()
+    }
+
+  else if(isTimestamp(userInput)) {
+    userDate = new Date(userInput)
+  
+    unix = userInput;
+    utc = new Date(unix * 1000).toUTCString();
+
+  }  
+  
+  res.json({  unix , utc  })
 });
 
 // listen for requests :)
